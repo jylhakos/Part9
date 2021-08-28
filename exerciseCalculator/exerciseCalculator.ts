@@ -59,3 +59,14 @@ export const calculateExercises  = (array : Array<number>, target : number) : Re
 }
 
 console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+
+console.log('$ npm run calculateExercises "[3, 0, 2, 4.5, 0, 3, 1]" 2')
+
+const array: Array<number> = JSON.parse(process.argv[2])
+
+const target: number = Number(process.argv[3])
+
+console.log(array, target)
+
+// 9.3
+console.log(calculateExercises(array, target))
