@@ -1,0 +1,19 @@
+{
+  "name": "exercisecalculator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "exerciseCalculator.ts",
+  "scripts": {
+    "ts-node": "ts-node",
+    "calculateExercises": "npm run ts-node -- exerciseCalculator.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "run-func": "^1.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.4"
+  }
+}
