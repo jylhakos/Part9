@@ -1,0 +1,24 @@
+{
+  "name": "part9",
+  "version": "1.0.0",
+  "description": "TypeScript",
+  "main": "bmiCalculator.ts",
+  "scripts": {
+    "ts-node": "ts-node",
+    "calculateBmi": "ts-node calculateBmi.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jylhakos/Part9.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jylhakos/Part9/issues"
+  },
+  "homepage": "https://github.com/jylhakos/Part9#readme",
+  "devDependencies": {
+    "@types/node": "^16.7.4"
+  }
+}
