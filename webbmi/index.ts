@@ -24,7 +24,26 @@ import express, { Request, Response } from 'express';
 
 import { calculateBmi } from "../calculateBmi/calculateBmi";
 
+// 9.7
+import { Result, calculateExercises } from "../exerciseCalculator/exerciseCalculator";
+
 const app = express();
+
+app.use(express.json());
+
+function validate(array: Array<any>): boolean | undefined {
+  if (!Array.isArray(array)) {
+    return false;
+  }
+
+  for (let i = 0, e = array.length; i < e; i++) {
+    if (isNaN(array[i])) {
+      return false;
+    }
+  }
+
+  return true
+}
 
 // 9.4
 app.get('/hello', (_req, res) => {
@@ -53,8 +72,70 @@ app.get('/bmi', (req : Request, res : Response) => {
   res.send({weight: weight, height: height, bmi: bmi});
 });
 
+app.post('/exercises', (req : Request, res : Response) => {
+
+  console.log('/exercises')
+
+  try {
+
+    
+
+    const body: any = JSON.stringify(req.body);
+
+    console.log('body', body);
+
+    const data: any = JSON.parse((body));
+
+    if (!(data.daily_exercises) || !(data.target)) {
+      res.json({
+        error: "parameters missing"
+      })
+      return
+    }
+
+    const daily_exercises: Array<number> = data.daily_exercises;
+
+    const target: number = Number(data.target);
+
+    console.log('data', daily_exercises, target);
+
+    if (validate(daily_exercises) === false) {
+      console.log("malformatted parameters")
+      res.json({
+        error: "malformatted parameters"
+      })
+      return
+    }
+
+    console.log('isNaN(target)', isNaN(target));
+
+    if (isNaN(target)) {
+      console.log("malformatted parameters")
+      res.json({
+        error: "malformatted parameters"
+      })
+      return
+    }
+
+    const result: Result = calculateExercises(daily_exercises, target);
+
+    console.log(result)
+
+    res.json(result);
+
+  } catch (e) {
+
+    res.status(500).send(e.message);
+  }
+
+})
+
 const PORT = 3002;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// $ curl -X "POST" http://localhost:3002/exercises -H "Content-Type: application/json" -d "{\"daily_exercises\":\"[1, 0, 2, 0, 3, 0, 2.5]\", \"target\":\"2.5\"}" -v
+
+// $ curl -X "POST" http://localhost:3002/exercises -H "Content-Type: application/json" -d '{ "daily_exercises": [1, 0, 2, 0, 3, 0, 2.5], "target": 2.5 }' -v
