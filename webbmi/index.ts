@@ -12,15 +12,41 @@
 
 // const express = require('express')
 
+// http://localhost:3002/bmi?height=180&weight=72
+
 import express from 'express'
+
+import { calculateBmi } from "../calculateBmi/calculateBmi"
 
 const app = express()
 
+// 9.4
 app.get('/hello', (_req, res) => {
   res.send('Hello World')
 })
 
-const PORT = 3003
+// 9.5
+app.get('/bmi', (req : any, res : any) => {
+
+  console.log('req.query', req.query)
+
+  if (typeof req.query.height === 'undefined' || typeof req.query.weight === 'undefined' 
+    || !(req.query.height) || !(req.query.weight)) {
+    res.send({error: "malformatted parameters"})
+  }
+
+  const height: number = Number(req.query.height)
+
+  const weight: number = Number(req.query.weight)
+
+  console.log(height, weight)
+
+  const bmi: any = calculateBmi(height, weight)
+
+  res.send({weight: weight, height: height, bmi: bmi})
+})
+
+const PORT = 3002
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)

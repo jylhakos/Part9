@@ -9,7 +9,7 @@
 
 // $ npm run calculateBmi
 
- const calculateBmi = (a: number, b: number) : string => {
+export const calculateBmi = (a: number, b: number) : string | undefined => {
 
  	const normal = 13500
 
@@ -20,6 +20,8 @@
 	if ((a * b) < normal) {
 		return normal_message
 	}
+
+	return undefined
 }
 
 // 9.1
