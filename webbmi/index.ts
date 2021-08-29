@@ -30,9 +30,9 @@ app.get('/bmi', (req : any, res : any) => {
 
   console.log('req.query', req.query)
 
-  if (typeof req.query.height === 'undefined' || typeof req.query.weight === 'undefined' 
-    || !(req.query.height) || !(req.query.weight)) {
+  if (!(req.query.height) || !(req.query.weight)) {
     res.send({error: "malformatted parameters"})
+    return
   }
 
   const height: number = Number(req.query.height)
