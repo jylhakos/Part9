@@ -1,6 +1,10 @@
 // $ npm i -S run-func
+
 // $ npm install @types/node --save-dev
+
 // $ npm run exerciseCalculator
+
+// $ npm run calculateExercises "[3, 0, 2, 4.5, 0, 3, 1]" 2
 
 interface Result {
     periodLength: number,
