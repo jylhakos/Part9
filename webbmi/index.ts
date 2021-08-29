@@ -42,7 +42,7 @@ function validate(array: Array<any>): boolean | undefined {
     }
   }
 
-  return true
+  return true;
 }
 
 // 9.4
@@ -72,54 +72,55 @@ app.get('/bmi', (req : Request, res : Response) => {
   res.send({weight: weight, height: height, bmi: bmi});
 });
 
+// 9.7
 app.post('/exercises', (req : Request, res : Response) => {
 
-  console.log('/exercises')
+  console.log('/exercises');
 
   try {
-
-    
 
     const body: any = JSON.stringify(req.body);
 
     console.log('body', body);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
     const data: any = JSON.parse((body));
 
     if (!(data.daily_exercises) || !(data.target)) {
       res.json({
         error: "parameters missing"
-      })
-      return
+      });
+      return;
     }
 
     const daily_exercises: Array<number> = data.daily_exercises;
 
-    const target: number = Number(data.target);
+    const target = Number(data.target);
 
     console.log('data', daily_exercises, target);
 
     if (validate(daily_exercises) === false) {
-      console.log("malformatted parameters")
+      console.log("malformatted parameters");
       res.json({
         error: "malformatted parameters"
-      })
-      return
+      });
+      return;
     }
 
     console.log('isNaN(target)', isNaN(target));
 
     if (isNaN(target)) {
-      console.log("malformatted parameters")
+      console.log("malformatted parameters");
       res.json({
         error: "malformatted parameters"
-      })
-      return
+      });
+      return;
     }
 
     const result: Result = calculateExercises(daily_exercises, target);
 
-    console.log(result)
+    console.log(result);
 
     res.json(result);
 
@@ -128,7 +129,7 @@ app.post('/exercises', (req : Request, res : Response) => {
     res.status(500).send(e.message);
   }
 
-})
+});
 
 const PORT = 3002;
 
