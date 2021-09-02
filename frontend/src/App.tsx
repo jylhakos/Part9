@@ -15,6 +15,7 @@ const App = () => {
 
   React.useEffect(() => {
 
+    // 9.8
     void axios.get<void>(`${apiBaseUrl}/ping`);
 
     /*

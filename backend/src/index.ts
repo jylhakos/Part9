@@ -41,7 +41,7 @@ app.get('/ping', (req, res) => {
 
 });
 
-// 9.9
+// 9.10
 app.use('/api/diagnoses', router);
 
 app.listen(PORT, () => {
