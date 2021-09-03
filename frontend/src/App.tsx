@@ -5,7 +5,7 @@ import { Button, Divider, Header, Container } from "semantic-ui-react";
 
 import { apiBaseUrl } from "./constants";
 import { useStateValue } from "./state";
-//import { Patient } from "./types";
+import { Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
 
@@ -15,22 +15,19 @@ const App = () => {
 
   React.useEffect(() => {
 
-    // 9.8
     void axios.get<void>(`${apiBaseUrl}/ping`);
 
-    /*
     const fetchPatientList = async () => {
       try {
         const { data: patientListFromApi } = await axios.get<Patient[]>(
-          `${apiBaseUrl}/patients`
+          `${apiBaseUrl}/api/patients`
         );
         dispatch({ type: "SET_PATIENT_LIST", payload: patientListFromApi });
       } catch (e) {
         console.error(e);
       }
     };
-  */  
-    //void fetchPatientList();
+    void fetchPatientList();
   }, [dispatch]);
 
   return (

@@ -24,13 +24,15 @@ const cors = require('cors');
 
 const app = express();
 
-import router from './routes/routes';
+const PORT = 3001;
+
+import diagnoseRouter from './routes/diagnoseRouter';
+
+import patientRouter  from './routes/patientRouter';
 
 app.use(cors());
 
 app.use(express.json());
-
-const PORT = 3001;
 
 // 9.8
 app.get('/ping', (req, res) => {
@@ -42,7 +44,10 @@ app.get('/ping', (req, res) => {
 });
 
 // 9.10
-app.use('/api/diagnoses', router);
+app.use('/api', diagnoseRouter);
+
+// 9.11
+app.use('/api', patientRouter);
 
 app.listen(PORT, () => {
 

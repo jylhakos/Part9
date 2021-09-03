@@ -2,14 +2,18 @@ import express from 'express';
 
 import diagnoseService from '../services/diagnoseService';
 
-const router = express.Router();
+const diagnoseRouter = express.Router();
 
-router.get('/', (_req, res) => {
-  res.send(diagnoseService.getDiagnoses());
+// 9.10
+diagnoseRouter.get('/diagnoses', (_req, res) => {
+
+  console.log('diagnoses')
+
+  res.json(diagnoseService.getDiagnoses());
 });
 
-router.post('/', (_req, res) => {
-  res.send('Saving Diagnose!');
+diagnoseRouter.post('/', (_req, res) => {
+  res.send('Saving Diagnose');
 });
 
-export default router;
+export default diagnoseRouter;
