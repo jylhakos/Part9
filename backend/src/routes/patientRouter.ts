@@ -12,8 +12,22 @@ patientRouter.get('/patients', (_req : Request, res: Response) => {
   res.json(patientService.getPatients());
 });
 
-patientRouter.post('/', (_req, res) => {
-  res.send('Saving Patient');
+// 9.12
+patientRouter.post('/patients', (req: Request, res: Response) => {
+
+  const { name, dateOfBirth, ssn, gender, occupation } = req.body;
+
+  const newPatientEntry = patientService.addPatient({ 
+    name,
+    dateOfBirth,
+    ssn,
+    gender,
+    occupation 
+  });
+
+  console.log('newPatientEntry', newPatientEntry)
+
+  res.json(newPatientEntry);
 });
 
 export default patientRouter;

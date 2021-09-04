@@ -25,7 +25,7 @@ const PatientListPage = () => {
   const submitNewPatient = async (values: PatientFormValues) => {
     try {
       const { data: newPatient } = await axios.post<Patient>(
-        `${apiBaseUrl}/patients`,
+        `${apiBaseUrl}/api/patients`,
         values
       );
       dispatch({ type: "ADD_PATIENT", payload: newPatient });
@@ -75,3 +75,13 @@ const PatientListPage = () => {
 };
 
 export default PatientListPage;
+
+/*
+
+  name: 'Reijo Mäki',
+  dateOfBirth: '1958-01-01',
+  ssn: '01011958-Y',
+  gender: 'male',
+  occupation: 'Author'
+
+*/

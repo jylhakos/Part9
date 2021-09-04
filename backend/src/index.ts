@@ -10,7 +10,9 @@
 
 // $ npm install --save-dev ts-node-dev
 
-// npm install cors --save
+// $ npm install cors --save
+
+// $ npm install @types/uuid --save-dev --save
 
 // $ npm run dev
 
