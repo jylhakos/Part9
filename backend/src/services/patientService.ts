@@ -4,6 +4,9 @@ import patients from '../../data/patients';
 
 import { PatientEntry, PatientEntryNonSSN, NewPatientEntry } from '../types'
 
+import { toNewPatientEntry } from '../utils'
+
+
 // 9.11
 //const getPatients = (): Array<Patient> => {
 
@@ -30,10 +33,18 @@ const addPatient = (entry: NewPatientEntry): PatientEntry => {
     entry.gender,
     entry.occupation);
 
+  // 9.13
+  const newPatientEntry = toNewPatientEntry(entry) as PatientEntry;
+
+  newPatientEntry.id = id;
+
+  // 9.12
+  /*
   const newPatientEntry = {
     id: id,
     ...entry
   };
+  */
 
   patients.push(newPatientEntry);
 
