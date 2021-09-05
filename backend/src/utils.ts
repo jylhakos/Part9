@@ -4,6 +4,10 @@ const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
 }
 
+const isArray = (object: unknown): object is Array<any> => {
+  return Array.isArray(object);
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isGender = (param: any): param is Gender => {
   return Object.values(Gender).includes(param);
@@ -73,7 +77,7 @@ export const parseSSN = (ssn: unknown): string => {
 
 export const parseOccupation = (occupation: unknown): string => {
 
-  if (!occupation  || !isString(occupation)) {
+  if (!occupation || !isString(occupation)) {
 
     console.log('Error', occupation);
 
@@ -85,16 +89,31 @@ export const parseOccupation = (occupation: unknown): string => {
 
 };
 
-export type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown , occupation: unknown };
+export const parseEntries = (entries: unknown): Array<string> => {
 
-export const toNewPatientEntry= ({ name, dateOfBirth, ssn, gender, occupation } : Fields): NewPatientEntry => {
+  if (!entries || !isArray(entries)) {
+
+    console.log('Error', entries);
+
+    throw new Error('Incorrect or missing entries: ' + entries);
+
+  }
+
+  return entries;
+
+};
+
+export type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown, entries: unknown };
+
+export const toNewPatientEntry= ({ name, dateOfBirth, ssn, gender, occupation, entries } : Fields): NewPatientEntry => {
 
   const newEntry: NewPatientEntry = {
     name: parseName(name),
     dateOfBirth: parseDateOfBirth(dateOfBirth),
     ssn: parseSSN(ssn),
     gender: parseGender(gender),
-    occupation: parseOccupation(occupation)
+    occupation: parseOccupation(occupation),
+    entries: parseEntries(entries)
   };
 
   console.log('newEntry', newEntry)

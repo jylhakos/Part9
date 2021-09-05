@@ -150,6 +150,7 @@ const Part = (props: CoursePart): JSX.Element => {
   }
 }
 
+// 9.14
 /*const Content = (props: CoursePartProps): JSX.Element => {
 
   return (
@@ -159,6 +160,7 @@ const Part = (props: CoursePart): JSX.Element => {
   )
 }*/
 
+// 9.15
 const Content = (props: CoursePartProps): JSX.Element => {
 
     return (
