@@ -6,12 +6,10 @@ import { Action } from "./reducer";
 
 export type State = {
   patients: { [id: string]: Patient };
-  //patient: { [id: string]: Patient | undefined };
 };
 
 const initialState: State = {
   patients: {},
-  //patient: {}
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([
@@ -35,4 +33,5 @@ export const StateProvider: React.FC<StateProviderProps> = ({
     </StateContext.Provider>
   );
 };
+
 export const useStateValue = () => useContext(StateContext);

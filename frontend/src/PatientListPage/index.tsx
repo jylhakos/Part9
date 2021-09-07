@@ -11,7 +11,7 @@ import AddPatientModal from "../AddPatientModal";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 import HealthRatingBar from "../components/HealthRatingBar";
-import { useStateValue } from "../state";
+import { useStateValue, setNewPatient } from "../state";
 
 const PatientListPage = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -27,16 +27,28 @@ const PatientListPage = () => {
   };
 
   const submitNewPatient = async (values: PatientFormValues) => {
+
     try {
+
       const { data: newPatient } = await axios.post<Patient>(
         `${apiBaseUrl}/api/patients`,
         values
       );
-      dispatch({ type: "ADD_PATIENT", payload: newPatient });
+
+      console.log('submitNewPatient', newPatient)
+
+      // 9.18
+      //dispatch({ type: "ADD_PATIENT", payload: newPatient });
+      dispatch(setNewPatient(newPatient));
+
       closeModal();
+
     } catch (e) {
-      console.error(e.response?.data || 'Unknown Error');
-      setError(e.response?.data?.error || 'Unknown error');
+
+        console.error(e.response?.data || 'Unknown Error');
+
+        setError(e.response?.data?.error || 'Unknown error');
+
     }
   };
 

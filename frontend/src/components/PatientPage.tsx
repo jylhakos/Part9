@@ -9,7 +9,7 @@ import { apiBaseUrl } from "../constants";
 
 import { Patient } from "../types";
 
-import { useStateValue } from "../state";
+import { useStateValue, setPatientPage } from "../state";
 
 import { Icon } from 'semantic-ui-react'
 
@@ -26,15 +26,25 @@ const PatientPage = () => {
 
 		const getPatient = async (id: string) => {
 
+			try {
+
 			const { data: patient } = await axios.get<Patient>(`${apiBaseUrl}/api/patients/${id}`);
 
-			dispatch({ type: "GET_PATIENT", payload: patient });
+			// 9.18
+			//dispatch({ type: "GET_PATIENT", payload: patient });
+			dispatch(setPatientPage(patient));
+
+			} catch (e) {
+
+				console.error(e);
+
+			}
 
 		}
 
 		void getPatient(id);
 
-	}, [dispatch]);
+	}, [id, dispatch]);
 
 	return (
 		<div className="PatientPage">

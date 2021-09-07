@@ -107,6 +107,10 @@ export type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender
 
 export const toNewPatientEntry= ({ name, dateOfBirth, ssn, gender, occupation, entries } : Fields): NewPatientEntry => {
 
+  if (entries === undefined) {
+    entries = []
+  }
+
   const newEntry: NewPatientEntry = {
     name: parseName(name),
     dateOfBirth: parseDateOfBirth(dateOfBirth),
