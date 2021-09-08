@@ -1,11 +1,16 @@
-import { Gender, NewPatientEntry } from './types'
+import { Gender, NewPatientEntry, Entry } from './types'
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
 }
 
-const isArray = (object: unknown): object is Array<any> => {
+/*const isArray = (object: unknown): object is Array<any> => {
   return Array.isArray(object);
+}*/
+
+// 9.19
+const isEntry = (object: unknown): object is Entry[] => {
+  return object !== undefined;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -89,9 +94,12 @@ export const parseOccupation = (occupation: unknown): string => {
 
 };
 
-export const parseEntries = (entries: unknown): Array<string> => {
+// 9.19
+//export const parseEntries = (entries: unknown): Array<string> => {
+  export const parseEntries = (entries: unknown): Entry[] => {
 
-  if (!entries || !isArray(entries)) {
+  //if (!entries || !isArray(entries)) {
+    if (!entries || !isEntry(entries)) {
 
     console.log('Error', entries);
 
@@ -106,10 +114,6 @@ export const parseEntries = (entries: unknown): Array<string> => {
 export type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown, entries: unknown };
 
 export const toNewPatientEntry= ({ name, dateOfBirth, ssn, gender, occupation, entries } : Fields): NewPatientEntry => {
-
-  if (entries === undefined) {
-    entries = []
-  }
 
   const newEntry: NewPatientEntry = {
     name: parseName(name),
