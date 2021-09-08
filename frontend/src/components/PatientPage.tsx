@@ -7,7 +7,7 @@ import axios from "axios";
 
 import { apiBaseUrl } from "../constants";
 
-import { Patient } from "../types";
+import { Patient, Entry } from "../types";
 
 import { useStateValue, setPatientPage } from "../state";
 
@@ -30,6 +30,8 @@ const PatientPage = () => {
 
 			const { data: patient } = await axios.get<Patient>(`${apiBaseUrl}/api/patients/${id}`);
 
+			console.log('PatientPage',patient)
+
 			// 9.18
 			//dispatch({ type: "GET_PATIENT", payload: patient });
 			dispatch(setPatientPage(patient));
@@ -46,6 +48,7 @@ const PatientPage = () => {
 
 	}, [id, dispatch]);
 
+	// 9.20
 	return (
 		<div className="PatientPage">
 			{Object.values(patients).map((patient: Patient) => patient.id === id ? 
@@ -58,6 +61,32 @@ const PatientPage = () => {
 					</div>
 					<div>
 					occupation: {patient.occupation}
+					</div>
+					<div>
+					{
+						(patient.entries && patient.entries.length > 0) ?
+						<h4 style={{paddingTop:25}}>entries</h4> : null 
+					}
+					<div>{ 
+						(patient.entries && patient.entries.length > 0) ? 
+						
+						(patient.entries.map((entries: Entry) =>
+							<div key={entries.id}>
+								<div>
+								{entries.date} {" "} {entries.description}
+								</div>
+								<div>
+								{
+								(entries && entries.diagnosisCodes !== undefined) ? 
+								(entries.diagnosisCodes.map((code: string)  => <li key={code}>{code}</li> )
+								) : null 
+								}
+								</div>
+							</div>
+							
+						)) : null
+						}
+					</div>
 					</div>
 				</div> : <div></div> ) 
 			}
