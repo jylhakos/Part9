@@ -11,10 +11,10 @@ import AddPatientModal from "../AddPatientModal";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 import HealthRatingBar from "../components/HealthRatingBar";
-import { useStateValue, setNewPatient } from "../state";
+import { usePatientStateValue, setNewPatient } from "../state";
 
 const PatientListPage = () => {
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = usePatientStateValue();
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | undefined>();
@@ -95,13 +95,3 @@ const PatientListPage = () => {
 };
 
 export default PatientListPage;
-
-/*
-
-  name: 'Reijo Mäki',
-  dateOfBirth: '1958-01-01',
-  ssn: '01011958-Y',
-  gender: 'male',
-  occupation: 'Author'
-
-*/
