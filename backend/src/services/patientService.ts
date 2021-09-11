@@ -2,9 +2,9 @@ import { v1 as uuid } from 'uuid'
 
 import patients from '../../data/patients';
 
-import { Patient, PatientEntryNonSSN, NewPatientEntry, PublicPatient } from '../types'
+import { Patient, PatientEntryNonSSN, NewPatientEntry, PublicPatient, NewEntry, Gender } from '../types'
 
-import { toNewPatientEntry } from '../utils'
+import { toNewPatientEntry, toNewEntry } from '../utils'
 
 // 9.16
 const getPatient = (id: string): PublicPatient | undefined => {
@@ -61,8 +61,49 @@ const addPatient = (entry: NewPatientEntry): Patient => {
   return newPatientEntry;
 }
 
+// 9.23
+const addEntry = (id: string, entry: NewEntry): Patient | any => {
+
+  // Entry = | HealthCheckEntry | HospitalEntry | OccupationalHealthcareEntry
+
+  // console.log('addEntry', 'id', id, 'entry', entry);
+
+  const newEntry = toNewEntry(entry) as NewEntry;
+
+  // console.log('newEntry.entry', newEntry.entry);
+
+  let updatedPatient: Patient = {
+    id: "", 
+    name: "",
+    dateOfBirth: "",
+    ssn: "",
+    gender: Gender.Other,
+    occupation: "",
+    entries:[]
+  };
+
+  patients.forEach(function(patient: Patient)  {
+
+    if (patient.id === id) {
+
+      // console.log('patient.id', patient.id);
+
+      patient.entries.push(newEntry.entry);
+
+      // console.log('addEntry', patient)
+
+      updatedPatient = patient
+    }
+  });
+
+  console.log('addEntry', updatedPatient);
+
+  return updatedPatient;
+}
+
 export default {
   getPatient,
   getPatients,
-  addPatient
+  addPatient,
+  addEntry
 };

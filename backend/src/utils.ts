@@ -1,4 +1,4 @@
-import { Gender, NewPatientEntry, Entry } from './types'
+import { Gender, NewPatientEntry, Entry, NewEntry } from './types'
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -9,7 +9,12 @@ const isString = (text: unknown): text is string => {
 }*/
 
 // 9.19
-const isEntry = (object: unknown): object is Entry[] => {
+const isEntries = (object: unknown): object is Entry[] => {
+  return object !== undefined;
+}
+
+
+const isEntry = (object: unknown): object is Entry => {
   return object !== undefined;
 }
 
@@ -46,7 +51,6 @@ export const parseName = (name: unknown): string => {
   return name;
 
 };
-
 
 export const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
@@ -98,8 +102,7 @@ export const parseOccupation = (occupation: unknown): string => {
 //export const parseEntries = (entries: unknown): Array<string> => {
   export const parseEntries = (entries: unknown): Entry[] => {
 
-  //if (!entries || !isArray(entries)) {
-    if (!entries || !isEntry(entries)) {
+    if (!entries || !isEntries(entries)) {
 
     console.log('Error', entries);
 
@@ -108,10 +111,38 @@ export const parseOccupation = (occupation: unknown): string => {
   }
 
   return entries;
+};
 
+export const parseEntry = (entries: unknown): Entry => {
+
+  // console.log('parseEntry', entries);
+
+  if (!entries || !isEntry(entries)) {
+
+    console.log('Parse Entry Error', entries);
+
+    throw new Error('Incorrect or missing entries: ' + entries);
+  }
+
+  return entries;
+};
+
+export const parseId = (id: unknown): string => {
+
+  if (!id || !isString(id)) {
+
+    console.log('Error', id);
+
+    throw new Error('Missing id: ' + id);
+
+  }
+
+  return id;
 };
 
 export type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown, entries: unknown };
+
+export type Entries = { entry: Entry };
 
 export const toNewPatientEntry= ({ name, dateOfBirth, ssn, gender, occupation, entries } : Fields): NewPatientEntry => {
 
@@ -125,6 +156,19 @@ export const toNewPatientEntry= ({ name, dateOfBirth, ssn, gender, occupation, e
   };
 
   console.log('newEntry', newEntry)
+
+  return newEntry;
+};
+
+export const toNewEntry = (entry: Entries): NewEntry => {
+
+  // console.log('toNewEntry', entry)
+
+  const newEntry: NewEntry = {
+    entry: parseEntry(entry)
+  };
+
+  // console.log('newEntry', newEntry)
 
   return newEntry;
 };

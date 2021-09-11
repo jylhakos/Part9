@@ -4,6 +4,28 @@ const patientRouter = express.Router();
 
 import patientService from '../services/patientService';
 
+// 9.23
+patientRouter.post('/patients/:id/entries', async (req : Request, res: Response) => {
+
+  console.log('req.body', req.body);
+  
+  const id = req.params.id;
+
+  const entries = req.body;
+
+  console.log('/patients/:id/entries', id, entries);
+
+  const newEntry = patientService.addEntry(
+    id,
+    entries
+  );
+
+  // console.log('newEntry', newEntry);
+
+  res.json(newEntry);
+
+});
+
 // $ curl -X "GET" http://localhost:3001/api/patients/:id
 
 // 9.16
@@ -11,7 +33,7 @@ patientRouter.get('/patients/:id', async (req : Request, res: Response) => {
 
   const id = req.params.id
 
-  console.log('id', id)
+  console.log('/patients/:id', id)
 
   const patient = await patientService.getPatient(id)
 
@@ -48,4 +70,7 @@ patientRouter.post('/patients', (req: Request, res: Response) => {
   res.json(newPatientEntry);
 });
 
+// $ curl -X "POST" http://localhost:3001/api/patients/d2773822-f723-11e9-8f0b-362b9e155667/entries -H "Content-Type: application/json" -d "{\"date\":\"2021-09-11\", \"specialist\":\"MD House\", \"type\":\"HealthCheck\", \"description\":\"Daily control visit\", \"healthCheckRating\":0}"
+
 export default patientRouter;
+

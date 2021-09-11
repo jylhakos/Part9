@@ -180,10 +180,10 @@ const PatientPage = () => {
 					<h3>{patient.name} 
 					<span>{(patient.gender === 'male') ? (<Icon enabled name='mars' size='big'/>) : (patient.gender === 'female') ? (<Icon enabled name='venus' size='big'/>) : (<Icon enabled name='genderless' size='big'/>)}</span>
 					</h3>
-					<div>
+					<div style={{fontWeight: 'bold'}}>
 					ssn: {patient.ssn}
 					</div>
-					<div>
+					<div style={{fontWeight: 'bold'}}> 
 					occupation: {patient.occupation}
 					</div>
 					<div>
