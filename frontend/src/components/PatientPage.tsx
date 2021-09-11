@@ -7,16 +7,15 @@ import axios from "axios";
 
 import { apiBaseUrl } from "../constants";
 
-import { Patient, Entry, Diagnosis } from "../types";
-//import { Patient, Entry } from "../types";
+import { Patient, Entry, Diagnosis, HealthCheckRating } from "../types";
 
 import { usePatientStateValue, useDiagnoseStateValue, setPatientPage } from "../state";
-//import { usePatientStateValue, setPatientPage } from "../state";
 
-import { Icon } from 'semantic-ui-react'
+import { Segment, Icon } from 'semantic-ui-react'
 
-
-
+function assertNever(x: never): never {
+	throw new Error(`Unexpected object: ${x}`);
+}
 
 // 9.17
 const PatientPage = () => {
@@ -68,7 +67,110 @@ const PatientPage = () => {
 			</>
 		);
 
+	};
+
+	const EmployerName : React.FC<{entry: Entry}> = ({entry}) => {
+
+		console.log('EmployerName', entry)
+
+		return (
+			<>
+				{Object.entries(entry).map(([key, value]) => (key === 'employerName') ? <span>{value}</span> : null )}
+			</>
+		)
+	};
+
+	const HealthCheckEntry: React.FC<{entry: Entry}> = ({entry}) => {
+		return (
+			<Segment raised>
+				<div key={entry.id}>
+					<h4>
+					{entry.date} {" "} <Icon enabled name='user md' size='big'/> {" "}
+					</h4>
+					<div style={{color:'lightgrey', fontStyle: 'italic'}}>{entry.description}</div>
+					<div>
+					{
+						(entry && entry.diagnosisCodes !== undefined) ? (entry.diagnosisCodes.map((code: string)  => <li key={code}><DiagnoseCode code={code} /></li>) ) : null 
+					}
+					</div>
+					<div style={{paddingTop:10}}>{(entry.healthCheckRating === HealthCheckRating.Healthy) ? (<Icon enabled name='heart' color="green"/>) : (entry.healthCheckRating === HealthCheckRating.LowRisk) ? (<Icon enabled name='heart' color="yellow"/>) : (<Icon enabled name='heart outline'/>)}</div>
+				</div>
+			</Segment>
+		);
 	}
+
+	const HospitalEntry: React.FC<{entry: Entry}> = ({entry}) => {
+		return (
+			<Segment raised>
+				<div key={entry.id}>
+					<h4>
+					{entry.date} {" "} <Icon enabled name='hospital' size='big'/> {" "}
+					</h4>
+					<div style={{color:'lightgrey', fontStyle: 'italic'}}>{entry.description}</div>
+					<div>
+					{
+						(entry && entry.diagnosisCodes !== undefined) ? (entry.diagnosisCodes.map((code: string)  => <li key={code}><DiagnoseCode code={code} /></li>) ) : null 
+					}
+					</div>
+					<div style={{paddingTop:10}}>{(entry.healthCheckRating === HealthCheckRating.Healthy) ? (<Icon enabled name='heart' color="green"/>) : (entry.healthCheckRating === HealthCheckRating.LowRisk) ? (<Icon enabled name='heart' color="yellow"/>) : (<Icon enabled name='heart outline'/>)}</div>
+				</div>
+			</Segment>
+		);
+	}
+
+	const OccupationalHealthcareEntry: React.FC<{entry: Entry}> = ({entry}) => {
+		
+		console.log('OccupationalHealthcareEntry', entry);
+
+		/*let employerName = null;
+
+		Object.entries(entry).map(function([key, value]) {
+			
+			//console.log('key', key, 'value', value);
+
+			if (key === 'employerName') {
+				employerName = value;
+			}
+		});
+
+		// <span> {employerName} </span>
+		*/
+
+		return (
+			<Segment raised>
+				<div key={entry.id}>
+					<h4>
+					{entry.date} {" "} <Icon enabled name='stethoscope' size='big'/> {" "} <EmployerName entry={entry}/>
+					</h4>
+					<div style={{color:'lightgrey', fontStyle: 'italic'}}>{entry.description}</div>
+					<div>
+					{
+						(entry && entry.diagnosisCodes !== undefined) ? (entry.diagnosisCodes.map((code: string)  => <li key={code}><DiagnoseCode code={code} /></li>) ) : null 
+					}
+					</div>
+					<div style={{paddingTop:10}}>{(entry.healthCheckRating === HealthCheckRating.Healthy) ? (<Icon enabled name='heart' color="green"/>) : (entry.healthCheckRating === HealthCheckRating.LowRisk) ? (<Icon enabled name='heart' color="yellow"/>) : (entry.healthCheckRating === HealthCheckRating.HighRisk) ? (<Icon enabled name='heart outline'/>) : null }</div>
+				</div>
+			</Segment>
+		);
+	}
+
+	// 9.22
+	const EntryDetails: React.FC<{entry: Entry}> = ({entry}) => {
+
+		console.log('EntryDetails', entry.type);
+
+		switch (entry.type) {
+			case "HealthCheck":
+				return <HealthCheckEntry entry={entry}/>
+			case "Hospital":
+				return <HospitalEntry entry={entry}/>
+			case "OccupationalHealthcare":
+				return <OccupationalHealthcareEntry entry={entry}/>
+			default:
+				console.log('assertNever', entry);
+				return assertNever(entry);
+			}
+		};
 
 	// 9.20
 	return (
@@ -76,7 +178,7 @@ const PatientPage = () => {
 			{Object.values(patients).map((patient: Patient) => patient.id === id ? 
 				<div key={patient.id}>
 					<h3>{patient.name} 
-					<span>{(patient.gender === 'male') ? (<Icon enabled name='mars' size='big'/>) : (patient.gender === 'female') ? (<Icon enabled name='venus' size='big'/>) : (<Icon enabled name='genderless' size='big'/>)}				</span>
+					<span>{(patient.gender === 'male') ? (<Icon enabled name='mars' size='big'/>) : (patient.gender === 'female') ? (<Icon enabled name='venus' size='big'/>) : (<Icon enabled name='genderless' size='big'/>)}</span>
 					</h3>
 					<div>
 					ssn: {patient.ssn}
@@ -92,19 +194,10 @@ const PatientPage = () => {
 					<div>
 					{ 
 						(patient.entries && patient.entries.length > 0) ? 
-							(patient.entries.map((entries: Entry) =>
-								<div key={entries.id}>
-									<div>
-									{entries.date} {" "} {entries.description}
-									</div>
-									<div>
-										{
-											(entries && entries.diagnosisCodes !== undefined) ? (entries.diagnosisCodes.map((code: string)  => <li key={code}><DiagnoseCode code={code} /></li>) ) : null 
-										}
-									</div>
-								</div>
+							(patient.entries.map((entry: Entry) =>
+								<EntryDetails key={entry.id} entry={entry} />
 							)
-						) : null 
+						) : null
 					}
 					</div>
 					</div>
