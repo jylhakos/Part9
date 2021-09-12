@@ -40,11 +40,11 @@ export const AddEntryForm = ({ onSubmit, onCancel } : Props ) => {
     //console.log('date', date);
     const year = String(date.getFullYear());
     //console.log('year', year);
-    const month = String(date.getMonth());
+    const month = Number(date.getMonth())+1;
     //console.log('month', month);
     const day = String(date.getDate());
     //console.log('day', day);
-    const local = year + "-" + month + "-" + day;
+    const local = year + "-" + String(month) + "-" + day;
     console.log('local', local);
     return local;
   }
@@ -61,6 +61,7 @@ export const AddEntryForm = ({ onSubmit, onCancel } : Props ) => {
 
       onSubmit={onSubmit}
 
+      // 9.25
       validate={values => {
 
         const requiredError = "Field is required";
@@ -70,6 +71,11 @@ export const AddEntryForm = ({ onSubmit, onCancel } : Props ) => {
         if (!values.specialist) {
 
           errors.specialist = requiredError;
+        }
+
+        if (!values.description) {
+
+          errors.description = requiredError;
         }
 
         return errors;
