@@ -16,11 +16,39 @@ type SelectFieldProps = {
   options: GenderOption[];
 };
 
+export type TypeOption = {
+  value: string;
+  label: string;
+};
+
+type SelectTypeProps = {
+  name: string;
+  label: string;
+  options: TypeOption[];
+};
+
 export const SelectField = ({
   name,
   label,
   options
 }: SelectFieldProps) => (
+  <Form.Field>
+    <label>{label}</label>
+    <Field as="select" name={name} className="ui dropdown">
+      {options.map(option => (
+        <option key={option.value} value={option.value}>
+          {option.label || option.value}
+        </option>
+      ))}
+    </Field>
+  </Form.Field>
+);
+
+export const SelectType = ({
+  name,
+  label,
+  options
+}: SelectTypeProps) => (
   <Form.Field>
     <label>{label}</label>
     <Field as="select" name={name} className="ui dropdown">
@@ -53,19 +81,20 @@ export const TextField= ({
 );
 
 /*
-  for exercises 9.24.-
+ 9.24.
 */
 interface NumberProps extends FieldProps {
   label: string;
   errorMessage?: string;
   min: number;
   max: number;
+  defaultValue?: number;
 }
 
-export const NumberField = ({ field, label, min, max } : NumberProps ) => (
+export const NumberField = ({ field, label, min, max, defaultValue } : NumberProps ) => (
   <Form.Field>
     <label>{label}</label>
-    <Field {...field} type='number' min={min} max={max} />
+    <Field {...field} type='number' min={min} max={max} defaultValue={defaultValue} />
 
     <div style={{ color:'red' }}>
       <ErrorMessage name={field.name} />

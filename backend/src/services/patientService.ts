@@ -62,13 +62,17 @@ const addPatient = (entry: NewPatientEntry): Patient => {
 }
 
 // 9.23
-const addEntry = (id: string, entry: NewEntry): Patient | any => {
+const addEntry = (patient_id: string, entry: NewEntry): Patient | any => {
+
+  const entry_id: string = uuid();
 
   // Entry = | HealthCheckEntry | HospitalEntry | OccupationalHealthcareEntry
 
   // console.log('addEntry', 'id', id, 'entry', entry);
 
   const newEntry = toNewEntry(entry) as NewEntry;
+
+  newEntry.entry.id = entry_id;
 
   // console.log('newEntry.entry', newEntry.entry);
 
@@ -84,9 +88,9 @@ const addEntry = (id: string, entry: NewEntry): Patient | any => {
 
   patients.forEach(function(patient: Patient)  {
 
-    if (patient.id === id) {
+    if (patient.id === patient_id) {
 
-      // console.log('patient.id', patient.id);
+      console.log('patient.id', patient.id);
 
       patient.entries.push(newEntry.entry);
 

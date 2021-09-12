@@ -5,13 +5,17 @@ import { useParams } from 'react-router-dom';
 
 import axios from "axios";
 
+import { Segment, Icon, Button } from 'semantic-ui-react'
+
 import { apiBaseUrl } from "../constants";
 
 import { Patient, Entry, Diagnosis, HealthCheckRating } from "../types";
 
-import { usePatientStateValue, useDiagnoseStateValue, setPatientPage } from "../state";
+import { usePatientStateValue, useDiagnoseStateValue, setPatientPage, setNewEntry} from "../state";
 
-import { Segment, Icon } from 'semantic-ui-react'
+import { EntryFormValues } from "./AddEntryForm";
+
+import AddEntryModal from "./AddEntryModal";
 
 function assertNever(x: never): never {
 	throw new Error(`Unexpected object: ${x}`);
@@ -25,7 +29,35 @@ const PatientPage = () => {
 	const [{ diagnoses }, ] = useDiagnoseStateValue();
 
 	const { id } = useParams<{ id: string }>();
-	
+
+	const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+
+	const [error, setError] = React.useState<string | undefined>();
+
+	const openModal = (): void => setModalOpen(true);
+
+	const closeModal = (): void => {
+		setModalOpen(false);
+		setError(undefined);
+	};
+
+	// 9.24
+	const submitNewEntry = async (values: EntryFormValues) => {
+
+		console.log('submitNewEntry', id, values);
+
+		const { data: newEntry } = await axios.post<Patient>(
+			`${apiBaseUrl}/api/patients/${id}/entries`,
+			values
+		);
+
+		console.log('newEntry', newEntry);
+
+		dispatch(setNewEntry(newEntry));
+
+		closeModal();
+	};
+
 	React.useEffect(() => {
 
 		console.log(id)
@@ -49,7 +81,6 @@ const PatientPage = () => {
 				console.error(e);
 
 			}
-
 		}
 
 		void getPatient(id);
@@ -66,7 +97,6 @@ const PatientPage = () => {
 			{ Object.values(diagnoses).map((diagnose: Diagnosis) => diagnose.code === code ? <span key={code}> {code} {diagnose.name} </span> : null) }
 			</>
 		);
-
 	};
 
 	const EmployerName : React.FC<{entry: Entry}> = ({entry}) => {
@@ -203,6 +233,15 @@ const PatientPage = () => {
 					</div>
 				</div> : <div></div> ) 
 			}
+			<div style={{paddingTop:25}}>
+				<AddEntryModal
+					modalOpen={modalOpen}
+					onSubmit={submitNewEntry}
+					error={error}
+					onClose={closeModal}
+				/>
+				<Button onClick={() => openModal()}>Add New Entry</Button>
+			</div>
 		</div>
 	);
 };
